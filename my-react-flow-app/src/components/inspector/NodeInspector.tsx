@@ -3,7 +3,6 @@ import { useGraph } from '../../hooks/useGraph'
 import { Badge } from '../ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { Input } from '../ui/input'
-import { Slider } from '../ui/slider'
 import type { NodeStatus } from '../../types'
 
 const statusColor: Record<NodeStatus, string> = {
@@ -17,6 +16,7 @@ export const NodeInspector = () => {
   const selectedAppId = useAppStore((s) => s.selectedAppId)
   const activeInspectorTab = useAppStore((s) => s.activeInspectorTab)
   const setActiveInspectorTab = useAppStore((s) => s.setActiveInspectorTab)
+  const updateNodeLabel = useAppStore((s) => s.updateNodeLabel)
 
   const { data } = useGraph(selectedAppId)
 
@@ -68,6 +68,7 @@ export const NodeInspector = () => {
             <Input
               defaultValue={node.name}
               className="h-8 text-sm"
+              onChange={(e) => updateNodeLabel(selectedNodeId, e.target.value)}
             />
           </div>
 
@@ -141,16 +142,30 @@ const ConfigSlider = ({ initialValue }: { initialValue: number }) => {
   const [value, setValue] = React.useState(initialValue)
 
   return (
-    <div className="space-y-2">
-      <Slider
-        min={0}
-        max={100}
-        step={1}
-        value={[value]}
-        onValueChange={([v]) => setValue(v)}
-        className="w-full"
-      />
-      <div className="flex items-center gap-2">
+    <div className="space-y-3">
+      <div className="flex items-center gap-3">
+        <div className="flex-1 relative flex items-center">
+          {/* Custom slider track */}
+          <div className="relative w-full h-2 rounded-full" style={{ background: '#334155' }}>
+            <div
+              className="absolute h-2 rounded-full"
+              style={{ width: `${value}%`, background: '#94a3b8' }}
+            />
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={value}
+              onChange={(e) => setValue(Number(e.target.value))}
+              className="absolute inset-0 w-full opacity-0 cursor-pointer h-2"
+            />
+            {/* Thumb */}
+            <div
+              className="absolute top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-slate-300 bg-background"
+              style={{ left: `calc(${value}% - 8px)` }}
+            />
+          </div>
+        </div>
         <Input
           type="number"
           min={0}
@@ -160,10 +175,10 @@ const ConfigSlider = ({ initialValue }: { initialValue: number }) => {
             const v = Math.min(100, Math.max(0, Number(e.target.value)))
             setValue(v)
           }}
-          className="h-8 w-20 text-sm"
+          className="h-8 w-20 text-sm shrink-0"
         />
-        <span className="text-xs text-muted-foreground">/ 100</span>
       </div>
+      <div className="text-xs text-muted-foreground text-right">{value} / 100</div>
     </div>
   )
 }
