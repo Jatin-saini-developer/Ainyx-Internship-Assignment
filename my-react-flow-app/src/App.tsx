@@ -1,27 +1,26 @@
 import { ReactFlowProvider } from '@xyflow/react'
-import { TopBar } from './components/layout/TopBar'
 import { LeftRail } from './components/layout/LeftRail'
 import { RightPanel } from './components/layout/RightPanel'
 import { FlowCanvas } from './components/canvas/FlowCanvas'
+import { TopBar } from './components/layout/TopBar'
+import { NodeInspector } from './components/inspector/NodeInspector'
 
 function App() {
   return (
-    <div className="h-screen w-screen flex flex-col bg-background text-foreground overflow-hidden">
-      <TopBar />
-      <div className="flex flex-1 overflow-hidden">
-        <LeftRail />
-        <ReactFlowProvider>
+    <ReactFlowProvider>
+      <div className="h-screen w-screen flex flex-col bg-background text-foreground overflow-hidden">
+        <TopBar />
+        <div className="flex flex-1 overflow-hidden">
+          <LeftRail />
           <main className="flex-1 relative overflow-hidden">
             <FlowCanvas />
           </main>
-        </ReactFlowProvider>
-        <RightPanel>
-          <div className="p-4 text-sm text-muted-foreground">
-            Select a node to inspect
-          </div>
-        </RightPanel>
+          <RightPanel>
+            <NodeInspector />
+          </RightPanel>
+        </div>
       </div>
-    </div>
+    </ReactFlowProvider>
   )
 }
 

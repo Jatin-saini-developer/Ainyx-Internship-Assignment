@@ -7,11 +7,11 @@ import {
   useNodesState,
   useEdgesState,
   addEdge,
-  Connection,
+  type Connection,
   BackgroundVariant,
   useReactFlow,
-  Node,
-  Edge,
+  type Node,
+  type Edge,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 import { useAppStore } from '../../store/useAppStore'
@@ -23,15 +23,29 @@ const toFlowNodes = (nodes: { id: string; name: string; status: string; configVa
     position: { x: 150 + (i % 2) * 350, y: 100 + Math.floor(i / 2) * 250 },
     data: { label: n.name, status: n.status, configValue: n.configValue },
     type: 'default',
+    style: {
+      background: '#1e1e2e',
+      color: '#e2e8f0',
+      border: '1px solid #334155',
+      borderRadius: '8px',
+      padding: '10px 16px',
+      fontSize: '13px',
+      fontWeight: 500,
+      minWidth: '140px',
+    },
   }))
 
 const toFlowEdges = (edges: { id: string; source: string; target: string }[]): Edge[] =>
-  edges.map((e) => ({ ...e, animated: true }))
+  edges.map((e) => ({
+    ...e,
+    animated: true,
+    style: { stroke: '#475569' },
+  }))
 
 export const FlowCanvas = () => {
   const selectedAppId = useAppStore((s) => s.selectedAppId)
   const setSelectedNodeId = useAppStore((s) => s.setSelectedNodeId)
-  const { data, isLoading } = useGraph(selectedAppId)
+  const { data, isLoading, isError } = useGraph(selectedAppId)
 
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
@@ -52,7 +66,7 @@ export const FlowCanvas = () => {
 
   if (!selectedAppId) {
     return (
-      <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
+      <div className="flex-1 w-full h-full flex items-center justify-center text-muted-foreground text-sm">
         Select an app to view its graph
       </div>
     )
@@ -60,8 +74,16 @@ export const FlowCanvas = () => {
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
+      <div className="flex-1 w-full h-full flex items-center justify-center text-muted-foreground text-sm">
         Loading graph...
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex-1 w-full h-full flex items-center justify-center text-destructive text-sm">
+        Failed to load graph. Please try again.
       </div>
     )
   }
@@ -79,9 +101,17 @@ export const FlowCanvas = () => {
         deleteKeyCode={['Delete', 'Backspace']}
         fitView
       >
-        <Background variant={BackgroundVariant.Dots} gap={16} size={1} />
+        <Background
+          variant={BackgroundVariant.Dots}
+          gap={16}
+          size={1}
+          color="#334155"
+        />
         <Controls />
-        <MiniMap />
+        <MiniMap
+          style={{ background: '#0f172a' }}
+          nodeColor="#334155"
+        />
       </ReactFlow>
     </div>
   )
