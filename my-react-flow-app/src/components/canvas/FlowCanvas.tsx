@@ -16,23 +16,17 @@ import {
 import '@xyflow/react/dist/style.css'
 import { useAppStore } from '../../store/useAppStore'
 import { useGraph } from '../../hooks/useGraph'
+import { ServiceNode } from './ServiceNode'
+
+
+const nodeTypes = { serviceNode: ServiceNode }
 
 const toFlowNodes = (nodes: { id: string; name: string; status: string; configValue: number }[]): Node[] =>
   nodes.map((n, i) => ({
     id: n.id,
-    position: { x: 150 + (i % 2) * 350, y: 100 + Math.floor(i / 2) * 250 },
+    position: { x: 150 + (i % 2) * 400, y: 100 + Math.floor(i / 2) * 280 },
     data: { label: n.name, status: n.status, configValue: n.configValue },
-    type: 'default',
-    style: {
-      background: '#1e1e2e',
-      color: '#e2e8f0',
-      border: '1px solid #334155',
-      borderRadius: '8px',
-      padding: '10px 16px',
-      fontSize: '13px',
-      fontWeight: 500,
-      minWidth: '140px',
-    },
+    type: 'serviceNode',
   }))
 
 const toFlowEdges = (edges: { id: string; source: string; target: string }[]): Edge[] =>
@@ -107,6 +101,7 @@ export const FlowCanvas = () => {
   return (
     <div className="w-full h-full">
       <ReactFlow
+        nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
@@ -118,8 +113,12 @@ export const FlowCanvas = () => {
         fitView
       >
         <Background variant={BackgroundVariant.Dots} gap={16} size={1} color="#334155" />
-        <Controls />
-        <MiniMap style={{ background: '#0f172a' }} nodeColor="#334155" />
+        <div className="hidden md:block">
+          <Controls />
+        </div>
+        <div className="hidden md:block">
+          <MiniMap style={{ background: '#0f172a' }} nodeColor="#334155" />
+        </div>
       </ReactFlow>
     </div>
   )

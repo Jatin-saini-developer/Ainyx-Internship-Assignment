@@ -1,11 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-sans: 'Geist Variable', sans-serif;
-  --font-heading: var(--font-sans);
+  --font-sans: 'Inter', 'Geist Variable', sans-serif;
+  --font-heading: 'Inter', sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -76,4 +77,392 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AppSelector – premium dark dropdown
+   ═══════════════════════════════════════════════════════════════ */
+
+.app-selector-root {
+  position: relative;
+  z-index: 50;
+}
+
+/* ── Skeleton loader ───────────────────────────────────────── */
+.app-selector-skeleton {
+  height: 38px;
+  width: 220px;
+  border-radius: 10px;
+  background: linear-gradient(110deg, #1e2433 30%, #2a3040 50%, #1e2433 70%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes skeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Trigger button ────────────────────────────────────────── */
+.app-selector-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 38px;
+  padding: 4px 6px 4px 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #14161e;
+  color: #e2e8f0;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  white-space: nowrap;
+  min-width: 220px;
+}
+
+.app-selector-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: #191c26;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.12);
+}
+
+.app-selector-trigger-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.app-selector-trigger-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.app-selector-trigger-chevron {
+  flex-shrink: 0;
+  opacity: 0.45;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-selector-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #94a3b8;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.app-selector-dots:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: #e2e8f0;
+}
+
+/* ── Dropdown panel ────────────────────────────────────────── */
+.app-selector-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  width: 320px;
+  background: #0d0f16;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 18px 16px 10px;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  animation: dropdownIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: top left;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Heading ───────────────────────────────────────────────── */
+.app-selector-heading {
+  color: #e2e8f0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px 2px;
+}
+
+/* ── Search row ────────────────────────────────────────────── */
+.app-selector-search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.app-selector-search-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #1a1d28;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.app-selector-search-box:focus-within {
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.app-selector-search-icon {
+  color: #475569;
+  flex-shrink: 0;
+}
+
+.app-selector-search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: #e2e8f0;
+  font-size: 13px;
+  font-family: inherit;
+  height: 100%;
+}
+
+.app-selector-search-input::placeholder {
+  color: #475569;
+}
+
+.app-selector-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+}
+
+.app-selector-add-btn:hover {
+  background: #2563eb;
+  transform: scale(1.04);
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.45);
+}
+
+.app-selector-add-btn:active {
+  transform: scale(0.97);
+}
+
+/* ── App list ──────────────────────────────────────────────── */
+.app-selector-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 320px;
+  overflow-y: auto;
+  margin: 0 -6px;
+  padding: 0 6px;
+  scrollbar-width: thin;
+  scrollbar-color: #1e2433 transparent;
+}
+
+.app-selector-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.app-selector-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.app-selector-list::-webkit-scrollbar-thumb {
+  background: #1e2433;
+  border-radius: 10px;
+}
+
+.app-selector-empty {
+  padding: 24px 0;
+  text-align: center;
+  color: #475569;
+  font-size: 13px;
+}
+
+/* ── Individual app item ───────────────────────────────────── */
+.app-selector-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 10px 10px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: #cbd5e1;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.1s;
+  text-align: left;
+}
+
+.app-selector-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+}
+
+.app-selector-item:active {
+  transform: scale(0.99);
+}
+
+.app-selector-item.selected {
+  background: rgba(99, 102, 241, 0.08);
+  color: #f1f5f9;
+}
+
+.app-selector-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.app-selector-item:hover .app-selector-item-icon {
+  transform: scale(1.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.app-selector-item-name {
+  flex: 1;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-selector-item-chevron {
+  flex-shrink: 0;
+  opacity: 0.3;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.app-selector-item:hover .app-selector-item-chevron {
+  opacity: 0.6;
+  transform: translateX(2px);
+}
+
+/* ── Responsive Styling (Mobile bottom sheet) ────────────────── */
+.app-selector-backdrop {
+  display: none;
+}
+
+.app-selector-drag-handle {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .app-selector-trigger {
+    min-width: 130px;
+    max-width: 170px;
+    font-size: 13px;
+    gap: 6px;
+    padding-right: 4px;
+  }
+
+  .app-selector-dots {
+    display: none;
+  }
+
+  .app-selector-backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 49;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  .app-selector-drag-handle {
+    display: block;
+    width: 36px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+
+  .app-selector-dropdown {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    width: 100%;
+    max-height: 80vh;
+    border-radius: 20px 20px 0 0;
+    border-bottom: none;
+    border-left: none;
+    border-right: none;
+    padding: 14px 20px 24px;
+    z-index: 50;
+    transform-origin: bottom center;
+    box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }

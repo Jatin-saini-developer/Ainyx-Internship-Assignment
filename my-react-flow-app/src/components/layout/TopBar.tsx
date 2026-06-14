@@ -12,7 +12,7 @@ export const TopBar = () => {
     <div className="h-12 border-b border-border bg-background flex items-center justify-between px-4 shrink-0">
       <div className="flex items-center gap-3">
         <div className="w-7 h-7 bg-primary rounded-sm" />
-        <span className="font-semibold text-sm">ReactFlow Canvas</span>
+        <span className="font-semibold text-sm hidden sm:inline">ReactFlow Canvas</span>
         <AppSelector />
       </div>
       <div className="flex items-center gap-2">
@@ -27,10 +27,10 @@ export const TopBar = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="md:hidden"
+          className="md:hidden text-xs px-2"
           onClick={() => setIsMobilePanelOpen(!isMobilePanelOpen)}
         >
-          Panel
+          ☰
         </Button>
       </div>
     </div>
