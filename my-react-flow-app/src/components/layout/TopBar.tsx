@@ -2,13 +2,15 @@ import { useAppStore } from '../../store/useAppStore'
 import { useReactFlow } from '@xyflow/react'
 import { Button } from '../ui/button'
 import { AppSelector } from './AppSelector'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Plus } from 'lucide-react'
 
 export const TopBar = () => {
   const setIsMobilePanelOpen = useAppStore((s) => s.setIsMobilePanelOpen)
   const isMobilePanelOpen = useAppStore((s) => s.isMobilePanelOpen)
   const simulateError = useAppStore((s) => s.simulateError)
   const setSimulateError = useAppStore((s) => s.setSimulateError)
+  const selectedAppId = useAppStore((s) => s.selectedAppId)
+  const addNode = useAppStore((s) => s.addNode)
   const { fitView } = useReactFlow()
 
   return (
@@ -19,6 +21,19 @@ export const TopBar = () => {
         <AppSelector />
       </div>
       <div className="flex items-center gap-2">
+        {/* Add Node */}
+        {selectedAppId && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="hidden md:flex items-center gap-1.5 text-xs h-8"
+            onClick={addNode}
+          >
+            <Plus size={13} />
+            Add Node
+          </Button>
+        )}
+
         {/* Error toggle */}
         <Button
           variant={simulateError ? 'destructive' : 'outline'}
