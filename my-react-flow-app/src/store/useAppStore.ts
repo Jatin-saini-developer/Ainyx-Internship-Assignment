@@ -8,6 +8,8 @@ interface AppState {
   activeInspectorTab: string
   nodes: Node[]
   edges: Edge[]
+  simulateError: boolean
+  setSimulateError: (val: boolean) => void
 
   setSelectedAppId: (id: string | null) => void
   setSelectedNodeId: (id: string | null) => void
@@ -25,6 +27,8 @@ export const useAppStore = create<AppState>((set) => ({
   activeInspectorTab: 'config',
   nodes: [],
   edges: [],
+  simulateError: false,
+  setSimulateError: (val) => set({ simulateError: val }),
 
   setSelectedAppId: (id) => set({ selectedAppId: id }),
   setSelectedNodeId: (id) => set({ selectedNodeId: id }),

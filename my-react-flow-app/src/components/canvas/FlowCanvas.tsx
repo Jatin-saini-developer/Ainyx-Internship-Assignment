@@ -17,6 +17,7 @@ import '@xyflow/react/dist/style.css'
 import { useAppStore } from '../../store/useAppStore'
 import { useGraph } from '../../hooks/useGraph'
 import { ServiceNode } from './ServiceNode'
+import { AlertTriangle } from 'lucide-react'
 
 
 const nodeTypes = { serviceNode: ServiceNode }
@@ -44,7 +45,7 @@ export const FlowCanvas = () => {
   const setStoreNodes = useAppStore((s) => s.setNodes)
   const setStoreEdges = useAppStore((s) => s.setEdges)
 
-  const { data, isLoading, isError } = useGraph(selectedAppId)
+  const { data, isLoading, isError,refetch } = useGraph(selectedAppId)
 
   const [nodes, setNodes, onNodesChange] = useNodesState(storeNodes)
   const [edges, setEdges, onEdgesChange] = useEdgesState(storeEdges)
@@ -90,13 +91,25 @@ export const FlowCanvas = () => {
     )
   }
 
-  if (isError) {
-    return (
-      <div className="w-full h-full flex items-center justify-center text-destructive text-sm">
-        Failed to load graph. Please try again.
+if (isError) {
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+      <div className="flex flex-col items-center gap-2">
+        <div className="w-12 h-12 rounded-full bg-destructive/10 flex items-center justify-center">
+          <AlertTriangle size={24} className="text-destructive" />
+        </div>
+        <p className="text-sm font-medium text-destructive">Failed to load graph</p>
+        <p className="text-xs text-muted-foreground">Service unavailable. Try again.</p>
       </div>
-    )
-  }
+      <button
+        onClick={() => refetch()}
+        className="text-xs px-4 py-2 rounded-md border border-border hover:bg-accent transition-colors text-foreground"
+      >
+        Retry
+      </button>
+    </div>
+  )
+}
 
   return (
     <div className="w-full h-full">
